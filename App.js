@@ -6,46 +6,47 @@
  * @flow
  */
 import React, { Component } from 'react';
-import { SectionList, StyleSheet, Text, View } from 'react-native';
+import { Animated,Text,View} from 'react-native';
 
-export default class SectionListBasics extends Component {
-  render() {
-    return (
-      <View style={styles.container}>
-        <SectionList
-          sections={[
-            {title: 'D', data: ['Devin']},
-            {title: 'J', data: ['Jackson', 'James', 'Jillian', 'Jimmy', 'Joel', 'John', 'Julie']},
-          ]}
-          renderItem={({item}) => <Text style={styles.item}>{item}</Text>}
-          renderSectionHeader={({section}) => <Text style={styles.sectionHeader}>{section.title}</Text>}
-          keyExtractor={(item, index) => index}
-        />
-      </View>
-    );
+class FadeInView extends React.Component{
+  state={
+    fadeAnim:new Animated.Value(0),//透明度初始值置为0
+  }
+  componentDidMount(){
+    Animated.timing(//随时间变化而执行动画
+      this.state.fadeAnim,
+      {
+        toValue:1,//透明度变为1
+        duration:10000,//动画持续10秒
+      }
+    ).start();//开始执行
+  }
+
+  render(){
+    let {fadeAnim}=this.state;
+
+    return(
+      <Animated.View 
+      style={{
+        ...this.props.style,
+        opacity:fadeAnim
+      }}>
+        {this.props.children}
+      </Animated.View>
+    )
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-   flex: 1,
-   paddingTop: 22
-  },
-  sectionHeader: {
-    paddingTop: 2,
-    paddingLeft: 10,
-    paddingRight: 10,
-    paddingBottom: 2,
-    fontSize: 14,
-    fontWeight: 'bold',
-    backgroundColor: 'rgba(247,247,247,1.0)',
-  },
-  item: {
-    padding: 10,
-    fontSize: 18,
-    height: 44,
-  },
-})
+export default class App extends React.Component{
+    render(){
+      return(
+        <View style={{flex:1,alignItems:'center',justifyContent:'center'}}>
+          <FadeInView style={{width:250,height:50,backgroundColor:'powderblue'}}>
+            <Text style={{fontSize:28,textAlign:'center',margin:10}}></Text>
+          </FadeInView>
+        </View>
+      )
+    }
+}
 // import React, {Fragment} from 'react';
 // import {
 //   SafeAreaView,
